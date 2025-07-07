@@ -195,6 +195,11 @@ Options:
   -p, --port <port>     Port to run the server on (default: 3000)
   -c, --config <path>   Path to config file
 ```
+### Local Dev to start the server
+
+```bash
+ node dist/cli.js start
+```
 
 ### Initialize Config
 
