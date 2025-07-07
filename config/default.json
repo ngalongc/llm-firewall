@@ -1,0 +1,31 @@
+{
+  "port": 3000,
+  "pii": {
+    "detectSSN": true,
+    "detectCreditCards": true,
+    "detectEmails": true,
+    "detectPhoneNumbers": true,
+    "detectIPAddresses": true,
+    "detectAPIKeys": true,
+    "customPatterns": []
+  },
+  "logging": {
+    "level": "info",
+    "logPII": true,
+    "logRequests": true
+  },
+  "providers": {
+    "openai": {
+      "enabled": true,
+      "baseURL": "https://api.openai.com"
+    },
+    "anthropic": {
+      "enabled": true,
+      "baseURL": "https://api.anthropic.com"
+    }
+  },
+  "rateLimit": {
+    "windowMs": 900000,
+    "max": 100
+  }
+}
