@@ -261,12 +261,6 @@ curl http://localhost:3000/status
 
 MIT License - see LICENSE file for details
 
-## 🆘 Support
-
-- 📧 Email: support@llm-firewall.com
-- 📖 Documentation: https://docs.llm-firewall.com
-- 🐛 Issues: https://github.com/yourusername/llm-firewall/issues
-
 ## 🚀 Roadmap
 
 - [ ] Advanced NLP-based PII detection
