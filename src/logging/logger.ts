@@ -2,6 +2,18 @@ import winston from 'winston';
 import { LoggingConfig, RequestLog } from '../types';
 
 export class Logger {
+  private static instance: Logger | null = null;
+  
+  public static getInstance(config?: LoggingConfig): Logger {
+    if (!Logger.instance && config) {
+      Logger.instance = new Logger(config);
+    }
+    return Logger.instance || new Logger({
+      level: 'info',
+      logPII: false,
+      logRequests: true
+    });
+  }
   private logger: winston.Logger;
   private config: LoggingConfig;
 
@@ -79,3 +91,6 @@ export class Logger {
     });
   }
 }
+
+// Export default instance
+export const logger = Logger.getInstance();

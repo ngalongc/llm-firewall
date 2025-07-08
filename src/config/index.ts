@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Config, PartialConfig, PIIDetectionConfig, LoggingConfig } from '../types';
+import { Config, PartialConfig, PIIDetectionConfig, LoggingConfig, RulesConfig } from '../types';
 
 export class ConfigManager {
   private config: Config;
@@ -56,6 +56,22 @@ export class ConfigManager {
       envConfig.logging.level = process.env.LLM_FIREWALL_LOG_LEVEL as 'error' | 'warn' | 'info' | 'debug';
     }
 
+    // Rules configuration
+    if (process.env.LLM_FIREWALL_RULES_ENABLED) {
+      if (!envConfig.rules) envConfig.rules = {};
+      envConfig.rules.enabled = process.env.LLM_FIREWALL_RULES_ENABLED === 'true';
+    }
+
+    if (process.env.LLM_FIREWALL_RULES_DIR) {
+      if (!envConfig.rules) envConfig.rules = {};
+      envConfig.rules.rulesDir = process.env.LLM_FIREWALL_RULES_DIR;
+    }
+
+    if (process.env.LLM_FIREWALL_MIN_CONFIDENCE) {
+      if (!envConfig.rules) envConfig.rules = {};
+      envConfig.rules.minConfidence = parseFloat(process.env.LLM_FIREWALL_MIN_CONFIDENCE);
+    }
+
     return envConfig;
   }
 
@@ -78,6 +94,10 @@ export class ConfigManager {
       rateLimit: {
         ...base.rateLimit,
         ...override.rateLimit
+      },
+      rules: {
+        ...base.rules,
+        ...override.rules
       }
     };
   }

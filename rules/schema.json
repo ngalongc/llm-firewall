@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LLM Firewall Rule Schema",
+  "description": "Schema for community-contributed PII detection rules",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for the rule set"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the rule set"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this rule set detects"
+    },
+    "author": {
+      "type": "string",
+      "description": "Rule set author"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for categorizing rules (e.g., 'financial', 'personal', 'vendor-specific')"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/rule"
+      },
+      "minItems": 1,
+      "description": "Array of detection rules"
+    }
+  },
+  "required": ["name", "version", "description", "rules"],
+  "definitions": {
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Unique identifier for the rule"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the rule"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of what this rule detects"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regular expression pattern for detection"
+        },
+        "flags": {
+          "type": "string",
+          "pattern": "^[gimuy]*$",
+          "default": "g",
+          "description": "Regex flags (g, i, m, u, y)"
+        },
+        "replacement": {
+          "type": "string",
+          "description": "Replacement text for redaction"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence level (0-1) of the detection accuracy"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["personal", "financial", "medical", "technical", "custom"],
+          "description": "Category of PII this rule detects"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"],
+          "description": "Severity level of the detected PII"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this rule is enabled by default"
+        },
+        "testCases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/testCase"
+          },
+          "description": "Test cases for validating the rule"
+        }
+      },
+      "required": ["id", "name", "pattern", "replacement", "confidence", "category", "severity"]
+    },
+    "testCase": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "Input text for testing"
+        },
+        "expected": {
+          "type": "string",
+          "description": "Expected output after redaction"
+        },
+        "shouldMatch": {
+          "type": "boolean",
+          "description": "Whether this test case should trigger the rule"
+        }
+      },
+      "required": ["input", "expected", "shouldMatch"]
+    }
+  }
+}

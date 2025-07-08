@@ -1,0 +1,153 @@
+{
+  "name": "API Keys Detection",
+  "version": "1.0.0",
+  "description": "Detects API keys and secrets from various providers",
+  "author": "LLM Firewall Team",
+  "tags": ["api-keys", "secrets", "technical", "security"],
+  "rules": [
+    {
+      "id": "openai_api_key",
+      "name": "OpenAI API Key",
+      "description": "Detects OpenAI API keys starting with sk-",
+      "pattern": "\\bsk-[a-zA-Z0-9]{32,}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_OPENAI_KEY]",
+      "confidence": 0.98,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Use key sk-1234567890abcdef1234567890abcdef",
+          "expected": "Use key [REDACTED_OPENAI_KEY]",
+          "shouldMatch": true
+        },
+        {
+          "input": "This is not a key sk-short",
+          "expected": "This is not a key sk-short",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "stripe_api_key",
+      "name": "Stripe API Key",
+      "description": "Detects Stripe API keys (publishable and secret)",
+      "pattern": "\\b(?:pk_live_[a-zA-Z0-9]{24,}|pk_test_[a-zA-Z0-9]{24,}|sk_live_[a-zA-Z0-9]{24,}|sk_test_[a-zA-Z0-9]{24,})\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_STRIPE_KEY]",
+      "confidence": 0.99,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Stripe key: pk_live_abcdef123456789012345678",
+          "expected": "Stripe key: [REDACTED_STRIPE_KEY]",
+          "shouldMatch": true
+        },
+        {
+          "input": "Process payment with pk_test_short",
+          "expected": "Process payment with pk_test_short",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "aws_access_key",
+      "name": "AWS Access Key",
+      "description": "Detects AWS access key IDs",
+      "pattern": "\\b(?:AKIA|ASIA|AROA|AIDA|AGPA|AIPA|ANPA|ANVA|APKA)[A-Z0-9]{16}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_AWS_KEY]",
+      "confidence": 0.95,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE",
+          "expected": "AWS_ACCESS_KEY_ID=[REDACTED_AWS_KEY]",
+          "shouldMatch": true
+        },
+        {
+          "input": "This is not a key AKIASHORT",
+          "expected": "This is not a key AKIASHORT",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "github_token",
+      "name": "GitHub Token",
+      "description": "Detects GitHub personal access tokens",
+      "pattern": "\\bghp_[a-zA-Z0-9]{36}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_GITHUB_TOKEN]",
+      "confidence": 0.99,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Token: ghp_abcdefghijklmnopqrstuvwxyz1234567890",
+          "expected": "Token: [REDACTED_GITHUB_TOKEN]",
+          "shouldMatch": true
+        },
+        {
+          "input": "GitHub token ghp_short",
+          "expected": "GitHub token ghp_short",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "anthropic_api_key",
+      "name": "Anthropic API Key",
+      "description": "Detects Anthropic API keys",
+      "pattern": "\\bsk-ant-api03-[a-zA-Z0-9\\-_]{95}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_ANTHROPIC_KEY]",
+      "confidence": 0.99,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Use sk-ant-api03-abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdefghijk123456700000",
+          "expected": "Use [REDACTED_ANTHROPIC_KEY]",
+          "shouldMatch": true
+        },
+        {
+          "input": "Not a key sk-ant-api03-short",
+          "expected": "Not a key sk-ant-api03-short",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "google_api_key",
+      "name": "Google API Key",
+      "description": "Detects Google API keys",
+      "pattern": "\\bAIza[a-zA-Z0-9\\-_]{35}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_GOOGLE_KEY]",
+      "confidence": 0.95,
+      "category": "technical",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Google key: AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI",
+          "expected": "Google key: [REDACTED_GOOGLE_KEY]",
+          "shouldMatch": true
+        },
+        {
+          "input": "This is not AIzaShort",
+          "expected": "This is not AIzaShort",
+          "shouldMatch": false
+        }
+      ]
+    }
+  ]
+}

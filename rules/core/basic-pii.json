@@ -1,0 +1,129 @@
+{
+  "name": "Basic PII Detection",
+  "version": "1.0.0",
+  "description": "Core PII detection rules for common sensitive data types",
+  "author": "LLM Firewall Team",
+  "tags": ["core", "pii", "personal", "financial"],
+  "rules": [
+    {
+      "id": "ssn_us",
+      "name": "US Social Security Number",
+      "description": "Detects US Social Security Numbers in various formats",
+      "pattern": "\\b(?:\\d{3}[-.\\/\\s]?\\d{2}[-.\\/\\s]?\\d{4}|\\d{9})\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_SSN]",
+      "confidence": 0.95,
+      "category": "personal",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "My SSN is 123-45-6789",
+          "expected": "My SSN is [REDACTED_SSN]",
+          "shouldMatch": true
+        },
+        {
+          "input": "Contact me at 555-123-4567",
+          "expected": "Contact me at 555-123-4567",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "credit_card_generic",
+      "name": "Credit Card Number",
+      "description": "Detects credit card numbers with various formatting",
+      "pattern": "\\b(?:\\d{4}[-\\s]?\\d{4}[-\\s]?\\d{4}[-\\s]?\\d{4}|\\d{13,19})\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_CREDIT_CARD]",
+      "confidence": 0.85,
+      "category": "financial",
+      "severity": "critical",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Card number: 4532-1234-5678-9012",
+          "expected": "Card number: [REDACTED_CREDIT_CARD]",
+          "shouldMatch": true
+        },
+        {
+          "input": "Year 2024 was great",
+          "expected": "Year 2024 was great",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "email_address",
+      "name": "Email Address",
+      "description": "Detects email addresses in standard format",
+      "pattern": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_EMAIL]",
+      "confidence": 0.98,
+      "category": "personal",
+      "severity": "medium",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Contact john@example.com for details",
+          "expected": "Contact [REDACTED_EMAIL] for details",
+          "shouldMatch": true
+        },
+        {
+          "input": "Visit our website at example.com",
+          "expected": "Visit our website at example.com",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "phone_us",
+      "name": "US Phone Number",
+      "description": "Detects US phone numbers in various formats",
+      "pattern": "\\(?[0-9]{3}\\)?[-.\\/\\s]?[0-9]{3}[-.\\/\\s]?[0-9]{4}",
+      "flags": "g",
+      "replacement": "[REDACTED_PHONE]",
+      "confidence": 0.90,
+      "category": "personal",
+      "severity": "medium",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Call me at (555) 123-4567",
+          "expected": "Call me at [REDACTED_PHONE]",
+          "shouldMatch": true
+        },
+        {
+          "input": "In year 2023 there were 1000 cases",
+          "expected": "In year 2023 there were 1000 cases",
+          "shouldMatch": false
+        }
+      ]
+    },
+    {
+      "id": "ip_address_v4",
+      "name": "IPv4 Address",
+      "description": "Detects IPv4 addresses",
+      "pattern": "\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b",
+      "flags": "g",
+      "replacement": "[REDACTED_IP]",
+      "confidence": 0.95,
+      "category": "technical",
+      "severity": "low",
+      "enabled": true,
+      "testCases": [
+        {
+          "input": "Server IP is 192.168.1.100",
+          "expected": "Server IP is [REDACTED_IP]",
+          "shouldMatch": true
+        },
+        {
+          "input": "Version 2.1.0 was released",
+          "expected": "Version 2.1.0 was released",
+          "shouldMatch": false
+        }
+      ]
+    }
+  ]
+}

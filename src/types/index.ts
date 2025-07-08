@@ -20,6 +20,7 @@ export interface Config {
   logging: LoggingConfig;
   providers: ProviderConfig;
   rateLimit: RateLimitConfig;
+  rules: RulesConfig;
 }
 
 export interface PartialConfig {
@@ -28,6 +29,7 @@ export interface PartialConfig {
   logging?: Partial<LoggingConfig>;
   providers?: Partial<ProviderConfig>;
   rateLimit?: Partial<RateLimitConfig>;
+  rules?: Partial<RulesConfig>;
 }
 
 export interface LoggingConfig {
@@ -56,6 +58,15 @@ export interface PIIDetectionResult {
   detectedTypes: string[];
   cleanedText: string;
   redactedCount: number;
+}
+
+export interface RulesConfig {
+  enabled: boolean;
+  rulesDir: string;
+  autoReload: boolean;
+  minConfidence: number;
+  enabledCategories: string[];
+  disabledRules: string[];
 }
 
 export interface RequestLog {
