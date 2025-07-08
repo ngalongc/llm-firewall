@@ -2,6 +2,12 @@
 
 A security proxy for LLM APIs with real-time PII detection and redaction. Protect your organization from accidentally sending sensitive data to language models.
 
+## How It Works
+
+![Start the Server](examples/start.png)
+![Call OpenAI API](examples/proxy_call.png)
+![Firewall](examples/firewall.png)
+
 ## ✨ Features
 
 - **🔒 Real-time PII Detection**: Automatically detects and redacts sensitive information
